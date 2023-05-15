@@ -22,6 +22,7 @@
 		08CB537C2A112E040095DBE9 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537B2A112E040095DBE9 /* AuthButton.swift */; };
 		08CB537E2A11336E0095DBE9 /* AuthTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537D2A11336E0095DBE9 /* AuthTextButton.swift */; };
 		08CB53802A1153380095DBE9 /* TransparentCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */; };
+		08CB53832A12398E0095DBE9 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53822A12398E0095DBE9 /* UIViewController+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		08CB537B2A112E040095DBE9 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		08CB537D2A11336E0095DBE9 /* AuthTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextButton.swift; sourceTree = "<group>"; };
 		08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentCoverView.swift; sourceTree = "<group>"; };
+		08CB53822A12398E0095DBE9 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,10 +78,7 @@
 			children = (
 				08CB53752A10F2BD0095DBE9 /* Extensions */,
 				08CB53702A1005390095DBE9 /* Views */,
-				08CB536A2A1004080095DBE9 /* LoginController.swift */,
-				08CB536C2A1004BB0095DBE9 /* SignupController.swift */,
-				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
-				08CB536E2A1005070095DBE9 /* HomeController.swift */,
+				08CB53812A1239770095DBE9 /* Controllers */,
 				08CB53672A1003670095DBE9 /* Configuration */,
 				08CB53602A0FF8480095DBE9 /* Info.plist */,
 			);
@@ -113,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				08CB53762A10F2D90095DBE9 /* UIView+Ext.swift */,
+				08CB53822A12398E0095DBE9 /* UIViewController+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -124,6 +124,17 @@
 				08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */,
 			);
 			path = AtomicViews;
+			sourceTree = "<group>";
+		};
+		08CB53812A1239770095DBE9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				08CB536A2A1004080095DBE9 /* LoginController.swift */,
+				08CB536C2A1004BB0095DBE9 /* SignupController.swift */,
+				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
+				08CB536E2A1005070095DBE9 /* HomeController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +232,7 @@
 			files = (
 				08CB53742A10E9830095DBE9 /* CircleView.swift in Sources */,
 				08CB537A2A1106B40095DBE9 /* AuthTextField.swift in Sources */,
+				08CB53832A12398E0095DBE9 /* UIViewController+Ext.swift in Sources */,
 				08CB537E2A11336E0095DBE9 /* AuthTextButton.swift in Sources */,
 				08CB53692A1003AC0095DBE9 /* ForgotPasswordController.swift in Sources */,
 				08CB536F2A1005070095DBE9 /* HomeController.swift in Sources */,
