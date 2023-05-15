@@ -9,6 +9,8 @@ import UIKit
 
 class HomeController: UIViewController {
 
+    let homeImageView = UIImageView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,7 +22,6 @@ class HomeController: UIViewController {
 
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.setHidesBackButton(true, animated: false)
     }
 
     private func configure() {
@@ -28,9 +29,31 @@ class HomeController: UIViewController {
 
         let signOutButton = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(signOut))
         navigationItem.rightBarButtonItem = signOutButton
+
+        let image = UIImage(systemName: "sun.dust")
+        homeImageView.image = image
+        homeImageView.contentMode = .scaleAspectFit
+        homeImageView.translatesAutoresizingMaskIntoConstraints = false
+        homeImageView.tintColor = .systemOrange
+
+        view.addSubview(homeImageView)
+
+        NSLayoutConstraint.activate([
+            homeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            homeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            homeImageView.widthAnchor.constraint(equalToConstant: 250),
+            homeImageView.heightAnchor.constraint(equalToConstant: 250)
+        ])
     }
 
     @objc private func signOut() {
-        navigationController?.popToRootViewController(animated: true)
+        do {
+            try AuthService.shared.logout()
+            if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
+                sceneDelegate.configureWithAuthStatus()
+            }
+        } catch let error {
+            showLogoutAlert(with: error)
+        }
     }
 }

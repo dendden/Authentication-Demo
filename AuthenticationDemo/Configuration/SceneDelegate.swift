@@ -5,6 +5,7 @@
 //  Created by Денис Трясунов on 13.05.2023.
 //
 
+import FirebaseAuth
 import UIKit
 
 // swiftlint:disable line_length
@@ -14,48 +15,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+
+        configureWindow(with: scene)
+
+        UINavigationBar.appearance().tintColor = .systemIndigo
+
+        configureWithAuthStatus()
+    }
+
+    private func configureWindow(with scene: UIScene) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-
-        UINavigationBar.appearance().tintColor = .systemIndigo
-
-        let loginVC = LoginController()
-        loginVC.title = "Sign In"
-        let navController = UINavigationController(rootViewController: loginVC)
-
-        window?.rootViewController = navController
-
         window?.makeKeyAndVisible()
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+    public func configureWithAuthStatus() {
+        if Auth.auth().currentUser != nil {
+            let homeVC = HomeController()
+            homeVC.title = "Welcome"
+            let navController = UINavigationController(rootViewController: homeVC)
+
+            animateToController(navController)
+        } else {
+            let loginVC = LoginController()
+            loginVC.title = "Sign In"
+            let navController = UINavigationController(rootViewController: loginVC)
+
+            animateToController(navController)
+        }
     }
 
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
-    }
+    private func animateToController(_ viewController: UIViewController) {
+        UIView.animate(withDuration: 0.15) {
+            self.window?.layer.opacity = 0
+        } completion: { _ in
+            self.window?.rootViewController = viewController
+            UIView.animate(withDuration: 0.25) {
+                self.window?.layer.opacity = 1
+            }
+        }
 
-    func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
-    }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
     }
 
     // swiftlint:enable line_length

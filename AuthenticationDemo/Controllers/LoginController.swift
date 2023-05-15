@@ -120,9 +120,9 @@ class LoginController: UIViewController {
     // MARK: - Selectors
     @objc private func didTapSignIn() {
         view.endEditing(true)
-        let homeVC = HomeController()
-        homeVC.title = "Welcome"
-        navigationController?.pushViewController(homeVC, animated: true)
+        if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
+            sceneDelegate.configureWithAuthStatus()
+        }
     }
 
     @objc private func didTapRegister() {
