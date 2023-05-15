@@ -76,9 +76,9 @@
 			children = (
 				08CB53752A10F2BD0095DBE9 /* Extensions */,
 				08CB53702A1005390095DBE9 /* Views */,
-				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
 				08CB536A2A1004080095DBE9 /* LoginController.swift */,
 				08CB536C2A1004BB0095DBE9 /* SignupController.swift */,
+				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
 				08CB536E2A1005070095DBE9 /* HomeController.swift */,
 				08CB53672A1003670095DBE9 /* Configuration */,
 				08CB53602A0FF8480095DBE9 /* Info.plist */,

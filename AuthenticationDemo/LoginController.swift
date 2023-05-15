@@ -9,6 +9,13 @@ import UIKit
 
 class LoginController: UIViewController {
 
+    enum AuthSystem: String {
+        case firebase = "Firebase"
+        case nodeJS = "Node.js"
+    }
+
+    private var selectedAuthSystem = AuthSystem.firebase
+
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign In", subtitle: "Sign in to your account")
     private let usernameTextField = AuthTextField(fieldType: .username)
@@ -16,6 +23,7 @@ class LoginController: UIViewController {
     private let signInButton = AuthButton(title: "Sign In")
     private let registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
     private let forgotPasswordButton = AuthTextButton(text: "Forgot password?", size: .small)
+    private let authSystemPicker = UISegmentedControl()
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -44,6 +52,13 @@ class LoginController: UIViewController {
         registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
         forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
 
+        authSystemPicker.translatesAutoresizingMaskIntoConstraints = false
+        authSystemPicker.tintColor = .systemIndigo
+        authSystemPicker.insertSegment(withTitle: AuthSystem.firebase.rawValue, at: 0, animated: true)
+        authSystemPicker.insertSegment(withTitle: AuthSystem.nodeJS.rawValue, at: 1, animated: true)
+        authSystemPicker.selectedSegmentIndex = 1
+        authSystemPicker.addTarget(self, action: #selector(authPickerSelectionChanged), for: .allEvents)
+
         createDismissKeyboardTapGesture()
     }
 
@@ -58,7 +73,8 @@ class LoginController: UIViewController {
 
     private func setupUI() {
         view.addSubviews(
-            headerView, usernameTextField, passwordTextField, signInButton, registerButton, forgotPasswordButton
+            headerView, usernameTextField, passwordTextField, signInButton, registerButton,
+            forgotPasswordButton, authSystemPicker
         )
 
         let padding: CGFloat = 20
@@ -92,7 +108,12 @@ class LoginController: UIViewController {
             forgotPasswordButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 20),
             forgotPasswordButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             forgotPasswordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            forgotPasswordButton.heightAnchor.constraint(equalToConstant: 20)
+            forgotPasswordButton.heightAnchor.constraint(equalToConstant: 20),
+
+            authSystemPicker.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30),
+            authSystemPicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            authSystemPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            authSystemPicker.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 
@@ -111,7 +132,18 @@ class LoginController: UIViewController {
 
     @objc private func didTapForgotPassword() {
         let forgotVC = ForgotPasswordController()
-        present(forgotVC, animated: true)
+        let navController = UINavigationController(rootViewController: forgotVC)
+        present(navController, animated: true)
+    }
+
+    @objc private func authPickerSelectionChanged() {
+        if authSystemPicker.selectedSegmentIndex == 0 {
+            selectedAuthSystem = .firebase
+            usernameTextField.setType(.email)
+        } else {
+            selectedAuthSystem = .nodeJS
+            usernameTextField.setType(.username)
+        }
     }
 }
 

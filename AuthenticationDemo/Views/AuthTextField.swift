@@ -17,7 +17,7 @@ class AuthTextField: UITextField {
         case normal, invalid
     }
 
-    private let fieldType: AuthTextFieldType
+    private var fieldType: AuthTextFieldType
     private let isLast: Bool
     private let isRepeating: Bool
 
@@ -46,9 +46,10 @@ class AuthTextField: UITextField {
         switch fieldType {
         case .username:
             returnKeyType = .next
+            textContentType = .name
             placeholder = "Username"
         case .email:
-            returnKeyType = .next
+            returnKeyType = isLast ? .go : .next
             keyboardType = .emailAddress
             textContentType = .emailAddress
             placeholder = "Email"
@@ -79,4 +80,18 @@ class AuthTextField: UITextField {
         }
     }
 
+    func setType(_ newType: AuthTextFieldType) {
+        if fieldType == .username && newType == .email {
+            fieldType = .email
+            keyboardType = .emailAddress
+            textContentType = .emailAddress
+            placeholder = "Email"
+        }
+        if fieldType == .email && newType == .username {
+            fieldType = .username
+            keyboardType = .default
+            textContentType = .name
+            placeholder = "Username"
+        }
+    }
 }
