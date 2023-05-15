@@ -79,12 +79,30 @@ class SignupController: UIViewController {
 
     private func configureTermsText() {
         termsText.translatesAutoresizingMaskIntoConstraints = false
+
         // swiftlint:disable:next line_length
-        termsText.text = "By creating an account, you agree to our Terms & Conditions and you acknowledge that you have read our Privacy Policy."
+        let textString = "By creating an account, you agree to our Terms & Conditions and you acknowledge that you have read our Privacy Policy."
+        let attrString = NSMutableAttributedString(string: textString)
+        attrString.addAttribute(
+            .link,
+            value: "terms://terms",
+            range: (attrString.string as NSString).range(of: "Terms & Conditions")
+        )
+        attrString.addAttribute(
+            .link,
+            value: "privacy://privacy",
+            range: (attrString.string as NSString).range(of: "Privacy Policy")
+        )
+
+        termsText.linkTextAttributes = [.foregroundColor: UIColor.systemIndigo]
+        termsText.attributedText = attrString
         termsText.font = .preferredFont(forTextStyle: .caption1)
         termsText.textAlignment = .center
         termsText.isEditable = false
         termsText.isScrollEnabled = false
+        termsText.delaysContentTouches = false
+
+        termsText.delegate = self
     }
 
     private func setupUI() {
@@ -187,5 +205,33 @@ extension SignupController: UITextFieldDelegate {
         }
 
         return true
+    }
+}
+
+extension SignupController: UITextViewDelegate {
+
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction
+    ) -> Bool {
+
+        switch URL.scheme {
+        case "terms":
+            print(">>> Show Ts&Cs")
+        case "privacy":
+            print(">>> Show Privacy Policy")
+        default:
+            print(">>> Unknown text link scheme")
+        }
+
+        return true
+    }
+
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        textView.delegate = nil
+        textView.selectedTextRange = nil
+        textView.delegate = self
     }
 }
