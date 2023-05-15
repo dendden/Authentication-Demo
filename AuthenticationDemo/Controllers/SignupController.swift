@@ -15,8 +15,7 @@ class SignupController: UIViewController {
     private let headerView = AuthHeaderView(title: "Sign Up", subtitle: "Create a new account")
     private let usernameTextField = AuthTextField(fieldType: .username)
     private let emailTextField = AuthTextField(fieldType: .email)
-    private let passwordTextField = AuthTextField(fieldType: .password, isLast: false)
-    private let repeatPasswordTextField = AuthTextField(fieldType: .password, isLast: true, isRepeating: true)
+    private let passwordTextField = AuthTextField(fieldType: .password)
     private let signUpButton = AuthButton(title: "Sign Up")
     private let hasAccountButton = AuthTextButton(text: "Already have an account? Tap to sign in", size: .medium)
     private let termsText = UITextView()
@@ -63,8 +62,6 @@ class SignupController: UIViewController {
         emailTextField.delegate = self
         passwordTextField.tag = 3
         passwordTextField.delegate = self
-        repeatPasswordTextField.tag = 4
-        repeatPasswordTextField.delegate = self
 
         NotificationCenter.default.addObserver(
             self, selector: #selector(adjustPaddingForKeyboardShow),
@@ -107,7 +104,7 @@ class SignupController: UIViewController {
 
     private func setupUI() {
         view.addSubviews(
-            headerView, usernameTextField, emailTextField, passwordTextField, repeatPasswordTextField,
+            headerView, usernameTextField, emailTextField, passwordTextField,
             signUpButton, hasAccountButton, termsText
         )
 
@@ -138,12 +135,7 @@ class SignupController: UIViewController {
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
 
-            repeatPasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
-            repeatPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            repeatPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            repeatPasswordTextField.heightAnchor.constraint(equalToConstant: 50),
-
-            signUpButton.topAnchor.constraint(equalTo: repeatPasswordTextField.bottomAnchor, constant: 30),
+            signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
             signUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             signUpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
@@ -193,7 +185,7 @@ extension SignupController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField.tag {
-        case 4:
+        case 3:
             didTapSignUp()
         default:
             let nextTag = textField.tag + 1

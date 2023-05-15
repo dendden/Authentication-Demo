@@ -32,6 +32,7 @@
 		08CB53932A1247C80095DBE9 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53922A1247C80095DBE9 /* RegistrationRequest.swift */; };
 		08CB53952A1250910095DBE9 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53942A1250910095DBE9 /* LoginRequest.swift */; };
 		08CB53972A126A710095DBE9 /* ValidationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53962A126A710095DBE9 /* ValidationService.swift */; };
+		08CB53992A12744D0095DBE9 /* FormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53982A12744D0095DBE9 /* FormViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		08CB53922A1247C80095DBE9 /* RegistrationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
 		08CB53942A1250910095DBE9 /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		08CB53962A126A710095DBE9 /* ValidationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationService.swift; sourceTree = "<group>"; };
+		08CB53982A12744D0095DBE9 /* FormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 		08CB53812A1239770095DBE9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				08CB53982A12744D0095DBE9 /* FormViewModel.swift */,
 				08CB536A2A1004080095DBE9 /* LoginController.swift */,
 				08CB536C2A1004BB0095DBE9 /* SignupController.swift */,
 				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
@@ -276,6 +279,7 @@
 				08CB53972A126A710095DBE9 /* ValidationService.swift in Sources */,
 				08CB537A2A1106B40095DBE9 /* AuthTextField.swift in Sources */,
 				08CB53832A12398E0095DBE9 /* UIViewController+Ext.swift in Sources */,
+				08CB53992A12744D0095DBE9 /* FormViewModel.swift in Sources */,
 				08CB537E2A11336E0095DBE9 /* AuthTextButton.swift in Sources */,
 				08CB53692A1003AC0095DBE9 /* ForgotPasswordController.swift in Sources */,
 				08CB536F2A1005070095DBE9 /* HomeController.swift in Sources */,

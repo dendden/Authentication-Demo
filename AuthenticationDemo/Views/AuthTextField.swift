@@ -14,17 +14,15 @@ class AuthTextField: UITextField {
     }
 
     enum AuthTextFieldState {
-        case normal, invalid
+        case normal, valid, invalid
     }
 
     private var fieldType: AuthTextFieldType
     private let isLast: Bool
-    private let isRepeating: Bool
 
-    init(fieldType: AuthTextFieldType, isLast: Bool = false, isRepeating: Bool = false) {
+    init(fieldType: AuthTextFieldType, isLast: Bool = false) {
         self.fieldType = fieldType
         self.isLast = isLast
-        self.isRepeating = isRepeating
         super.init(frame: .zero)
 
         configure()
@@ -54,10 +52,10 @@ class AuthTextField: UITextField {
             textContentType = .emailAddress
             placeholder = "Email"
         case .password:
-            returnKeyType = isLast ? .go : .next
+            returnKeyType = .go
             textContentType = .password
             isSecureTextEntry = true
-            placeholder = isRepeating ? "Repeat password" : "Password"
+            placeholder = "Password"
         }
     }
 
@@ -74,9 +72,12 @@ class AuthTextField: UITextField {
         case .normal:
             backgroundColor = .secondarySystemBackground
             layer.borderColor = UIColor.secondarySystemFill.cgColor
+        case.valid:
+            backgroundColor = .systemMint.withAlphaComponent(0.25)
+            layer.borderColor = UIColor.systemMint.cgColor
         case .invalid:
-            backgroundColor = .systemRed.withAlphaComponent(0.25)
-            layer.borderColor = UIColor.systemRed.cgColor
+            backgroundColor = .systemPink.withAlphaComponent(0.25)
+            layer.borderColor = UIColor.systemPink.cgColor
         }
     }
 

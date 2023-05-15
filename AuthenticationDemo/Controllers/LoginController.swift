@@ -5,6 +5,7 @@
 //  Created by Денис Трясунов on 13.05.2023.
 //
 
+import Combine
 import UIKit
 
 class LoginController: UIViewController {
@@ -14,12 +15,13 @@ class LoginController: UIViewController {
         case nodeJS = "Node.js"
     }
 
-    private var selectedAuthSystem = AuthSystem.firebase
+    private var selectedAuthSystem = AuthSystem.nodeJS
+    private var viewModel = FormViewModel(formType: .loginNJS)
 
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign In", subtitle: "Sign in to your account")
     private let usernameTextField = AuthTextField(fieldType: .username)
-    private let passwordTextField = AuthTextField(fieldType: .password, isLast: true)
+    private let passwordTextField = AuthTextField(fieldType: .password)
     private let signInButton = AuthButton(title: "Sign In")
     private let registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
     private let forgotPasswordButton = AuthTextButton(text: "Forgot password?", size: .small)
@@ -48,18 +50,26 @@ class LoginController: UIViewController {
         passwordTextField.tag = 2
         passwordTextField.delegate = self
 
+        configureButtons()
+        configureAuthSelector()
+        configurePublishers()
+
+        createDismissKeyboardTapGesture()
+    }
+
+    private func configureButtons() {
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
         forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
+    }
 
+    private func configureAuthSelector() {
         authSystemPicker.translatesAutoresizingMaskIntoConstraints = false
         authSystemPicker.tintColor = .systemIndigo
         authSystemPicker.insertSegment(withTitle: AuthSystem.firebase.rawValue, at: 0, animated: true)
         authSystemPicker.insertSegment(withTitle: AuthSystem.nodeJS.rawValue, at: 1, animated: true)
         authSystemPicker.selectedSegmentIndex = 1
         authSystemPicker.addTarget(self, action: #selector(authPickerSelectionChanged), for: .allEvents)
-
-        createDismissKeyboardTapGesture()
     }
 
     /// Adds a tap gesture that dismisses keyboard to the view.
@@ -137,13 +147,137 @@ class LoginController: UIViewController {
     }
 
     @objc private func authPickerSelectionChanged() {
+        usernameTextField.text?.removeAll()
+        usernameTextField.setColor(for: .normal)
+        passwordTextField.text?.removeAll()
+        passwordTextField.setColor(for: .normal)
         if authSystemPicker.selectedSegmentIndex == 0 {
             selectedAuthSystem = .firebase
             usernameTextField.setType(.email)
+            viewModel = FormViewModel(formType: .loginFirebase)
         } else {
             selectedAuthSystem = .nodeJS
             usernameTextField.setType(.username)
+            viewModel = FormViewModel(formType: .loginNJS)
         }
+        configurePublishers()
+    }
+
+    // MARK: - Publishers:
+    private func configurePublishers() {
+
+        switch selectedAuthSystem {
+        case .nodeJS:
+            setNodeJSUsernamePublishers()
+            viewModel.isEmailValid = true
+        case .firebase:
+            setFirebaseUsernamePublishers()
+            viewModel.isUsernameValid = true
+        }
+
+        setPasswordPublishers()
+        setSubmitEnabledPublisher()
+    }
+
+    private func setNodeJSUsernamePublishers() {
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
+            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
+            .assign(to: \.username, on: viewModel)
+            .store(in: &viewModel.cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
+            .sink { [weak self] _ in self?.setUsernameValidPublisher() }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func setFirebaseUsernamePublishers() {
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
+            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
+            .assign(to: \.email, on: viewModel)
+            .store(in: &viewModel.cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
+            .sink { [weak self] _ in self?.setEmailValidPublisher() }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func setPasswordPublishers() {
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidChangeNotification, object: passwordTextField)
+            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
+            .assign(to: \.password, on: viewModel)
+            .store(in: &viewModel.cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidBeginEditingNotification, object: passwordTextField)
+            .sink { [weak self] _ in self?.setPasswordValidPublisher() }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func mapTextFromOutput(_ output: NotificationCenter.Publisher.Output) -> String? {
+        if let textField = output.object as? AuthTextField {
+            return textField.text
+        } else {
+            return nil
+        }
+    }
+
+    private func setUsernameValidPublisher() {
+        viewModel.$isUsernameValid
+            .sink { [weak self] isValid in
+                guard let self else { return }
+                if isValid {
+                    self.usernameTextField.setColor(for: .valid)
+                } else {
+                    self.usernameTextField.setColor(for: .invalid)
+                }
+            }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func setEmailValidPublisher() {
+        viewModel.$isEmailValid
+            .sink { [weak self] isValid in
+                guard let self else { return }
+                if isValid {
+                    self.usernameTextField.setColor(for: .valid)
+                } else {
+                    self.usernameTextField.setColor(for: .invalid)
+                }
+            }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func setPasswordValidPublisher() {
+        viewModel.$isPasswordValid
+            .sink { [weak self] isValid in
+                guard let self else { return }
+                if isValid {
+                    self.passwordTextField.setColor(for: .valid)
+                } else {
+                    self.passwordTextField.setColor(for: .invalid)
+                }
+            }
+            .store(in: &viewModel.cancellables)
+    }
+
+    private func setSubmitEnabledPublisher() {
+        viewModel.$isSubmitEnabled
+            .sink { [weak self] isEnabled in
+                guard let self else { return }
+                if isEnabled {
+                    self.signInButton.isEnabled = true
+                    self.signInButton.layer.opacity = 1
+                } else {
+                    self.signInButton.isEnabled = false
+                    self.signInButton.layer.opacity = 0.5
+                }
+            }
+            .store(in: &viewModel.cancellables)
     }
 }
 
