@@ -19,8 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
 
-        let navController = UINavigationController(rootViewController: LoginController())
-        navController.modalPresentationStyle = .fullScreen
+        UINavigationBar.appearance().tintColor = .systemIndigo
+
+        let loginVC = LoginController()
+        loginVC.title = "Sign In"
+        let navController = UINavigationController(rootViewController: loginVC)
+
         window?.rootViewController = navController
 
         window?.makeKeyAndVisible()

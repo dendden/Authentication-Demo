@@ -21,6 +21,7 @@
 		08CB537A2A1106B40095DBE9 /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53792A1106B40095DBE9 /* AuthTextField.swift */; };
 		08CB537C2A112E040095DBE9 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537B2A112E040095DBE9 /* AuthButton.swift */; };
 		08CB537E2A11336E0095DBE9 /* AuthTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537D2A11336E0095DBE9 /* AuthTextButton.swift */; };
+		08CB53802A1153380095DBE9 /* TransparentCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		08CB53792A1106B40095DBE9 /* AuthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		08CB537B2A112E040095DBE9 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		08CB537D2A11336E0095DBE9 /* AuthTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextButton.swift; sourceTree = "<group>"; };
+		08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentCoverView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				08CB53732A10E9830095DBE9 /* CircleView.swift */,
+				08CB537F2A1153380095DBE9 /* TransparentCoverView.swift */,
 			);
 			path = AtomicViews;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				08CB53692A1003AC0095DBE9 /* ForgotPasswordController.swift in Sources */,
 				08CB536F2A1005070095DBE9 /* HomeController.swift in Sources */,
 				08CB53532A0FF8440095DBE9 /* AppDelegate.swift in Sources */,
+				08CB53802A1153380095DBE9 /* TransparentCoverView.swift in Sources */,
 				08CB536D2A1004BB0095DBE9 /* SignupController.swift in Sources */,
 				08CB537C2A112E040095DBE9 /* AuthButton.swift in Sources */,
 				08CB53772A10F2D90095DBE9 /* UIView+Ext.swift in Sources */,

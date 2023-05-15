@@ -19,10 +19,12 @@ class AuthTextField: UITextField {
 
     private let fieldType: AuthTextFieldType
     private let isLast: Bool
+    private let isRepeating: Bool
 
-    init(fieldType: AuthTextFieldType, isLast: Bool = false) {
+    init(fieldType: AuthTextFieldType, isLast: Bool = false, isRepeating: Bool = false) {
         self.fieldType = fieldType
         self.isLast = isLast
+        self.isRepeating = isRepeating
         super.init(frame: .zero)
 
         configure()
@@ -38,23 +40,32 @@ class AuthTextField: UITextField {
         autocorrectionType = .no
         autocapitalizationType = .none
 
+        setKeyboardDoneButton()
         translatesAutoresizingMaskIntoConstraints = false
 
         switch fieldType {
         case .username:
             returnKeyType = .next
             placeholder = "Username"
+        case .email:
+            returnKeyType = .next
+            keyboardType = .emailAddress
+            textContentType = .emailAddress
+            placeholder = "Email"
         case .password:
             returnKeyType = isLast ? .go : .next
             textContentType = .password
             isSecureTextEntry = true
-            placeholder = "Password"
-        case .email:
-            returnKeyType = isLast ? .go : .next
-            keyboardType = .emailAddress
-            textContentType = .emailAddress
-            placeholder = "Email"
+            placeholder = isRepeating ? "Repeat password" : "Password"
         }
+    }
+
+    private func setKeyboardDoneButton() {
+        let bar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 45))
+        let spacer = UIBarButtonItem(systemItem: .flexibleSpace)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(resignFirstResponder))
+        bar.items = [spacer, done]
+        inputAccessoryView = bar
     }
 
     func setColor(for state: AuthTextFieldState) {

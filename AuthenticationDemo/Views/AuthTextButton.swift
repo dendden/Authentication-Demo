@@ -29,7 +29,7 @@ class AuthTextButton: UIButton {
     }
 
     private func configure() {
-        
+
         translatesAutoresizingMaskIntoConstraints = false
         configuration = .plain()
         setTitle(text, for: .normal)

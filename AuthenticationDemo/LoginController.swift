@@ -9,12 +9,10 @@ import UIKit
 
 class LoginController: UIViewController {
 
-    // MARK: - Variables
-
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign In", subtitle: "Sign in to your account")
-    private let usernameTexField = AuthTextField(fieldType: .username)
-    private let passwordTexField = AuthTextField(fieldType: .password, isLast: true)
+    private let usernameTextField = AuthTextField(fieldType: .username)
+    private let passwordTextField = AuthTextField(fieldType: .password, isLast: true)
     private let signInButton = AuthButton(title: "Sign In")
     private let registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
     private let forgotPasswordButton = AuthTextButton(text: "Forgot password?", size: .small)
@@ -30,17 +28,37 @@ class LoginController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     // MARK: - UI Setup
     private func configure() {
         view.backgroundColor = .systemBackground
+
+        usernameTextField.tag = 1
+        usernameTextField.delegate = self
+        passwordTextField.tag = 2
+        passwordTextField.delegate = self
+
+        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
+        forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
+
+        createDismissKeyboardTapGesture()
+    }
+
+    /// Adds a tap gesture that dismisses keyboard to the view.
+    private func createDismissKeyboardTapGesture() {
+        let tap = UITapGestureRecognizer(
+            target: view,
+            action: #selector(UIView.endEditing)
+        )
+        view.addGestureRecognizer(tap)
     }
 
     private func setupUI() {
         view.addSubviews(
-            headerView, usernameTexField, passwordTexField, signInButton, registerButton, forgotPasswordButton
+            headerView, usernameTextField, passwordTextField, signInButton, registerButton, forgotPasswordButton
         )
 
         let padding: CGFloat = 20
@@ -51,17 +69,17 @@ class LoginController: UIViewController {
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 190),
 
-            usernameTexField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 50),
-            usernameTexField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            usernameTexField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            usernameTexField.heightAnchor.constraint(equalToConstant: 50),
+            usernameTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 50),
+            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 50),
 
-            passwordTexField.topAnchor.constraint(equalTo: usernameTexField.bottomAnchor, constant: 20),
-            passwordTexField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            passwordTexField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            passwordTexField.heightAnchor.constraint(equalToConstant: 50),
+            passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
+            passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
 
-            signInButton.topAnchor.constraint(equalTo: passwordTexField.bottomAnchor, constant: 30),
+            signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
             signInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             signInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             signInButton.heightAnchor.constraint(equalToConstant: 50),
@@ -79,5 +97,34 @@ class LoginController: UIViewController {
     }
 
     // MARK: - Selectors
+    @objc private func didTapSignIn() {
+        view.endEditing(true)
+        let homeVC = HomeController()
+        homeVC.title = "Welcome"
+        navigationController?.pushViewController(homeVC, animated: true)
+    }
 
+    @objc private func didTapRegister() {
+        let signupVC = SignupController()
+        navigationController?.pushViewController(signupVC, animated: true)
+    }
+
+    @objc private func didTapForgotPassword() {
+        let forgotVC = ForgotPasswordController()
+        present(forgotVC, animated: true)
+    }
+}
+
+extension LoginController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField.tag {
+        case 1:
+            passwordTextField.becomeFirstResponder()
+        default:
+            didTapSignIn()
+        }
+
+        return true
+    }
 }

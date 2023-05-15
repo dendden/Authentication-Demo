@@ -36,6 +36,18 @@ class AuthHeaderView: UIView {
     }
 
     // MARK: - UI Setup
+    func setCover() {
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
+        blurView.frame = bounds
+        addSubview(blurView)
+    }
+
+    func removeCover() {
+        if let blurView = subviews.last as? UIVisualEffectView {
+            blurView.removeFromSuperview()
+        }
+    }
+
     private func configureDefaultLabels() {
         titleLabel.text = "Title"
         titleLabel.font = .preferredFont(forTextStyle: .largeTitle)
