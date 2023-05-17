@@ -37,8 +37,13 @@ class AuthHeaderView: UIView {
 
     // MARK: - UI Setup
     func setCover() {
+        if let blurView = subviews.last as? UIVisualEffectView {
+            // this is a duplicate call from keyboardWillShow notification, so abort..
+            return
+        }
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
         blurView.frame = bounds
+        blurView.transform = CGAffineTransform(translationX: 0, y: -15)
         addSubview(blurView)
     }
 

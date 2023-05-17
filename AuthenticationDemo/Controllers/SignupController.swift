@@ -175,8 +175,8 @@ class SignupController: UIViewController {
     @objc private func adjustPaddingForKeyboardHide() {
         UIView.animate(withDuration: 0.1) {
             self.adjustableHeaderVerticalConstraint.constant = 50
-            self.view.layoutIfNeeded()
             self.headerView.removeCover()
+            self.view.layoutIfNeeded()
         }
     }
 }

@@ -66,7 +66,6 @@ final class UIPublishersManager {
         NotificationCenter.default
             .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
             .sink { [weak self] _ in
-                print(">>> setting username valid pub on: \(Thread.current)")
                 self?.setUsernameValidPublisher(usernameTextField: usernameTextField)
             }
             .store(in: &formViewModel.cancellables)
@@ -110,10 +109,8 @@ final class UIPublishersManager {
         formViewModel.$isUsernameValid
             .sink { isValid in
                 if isValid {
-                    print(">>> setting username field green color pub on: \(Thread.current)")
                     usernameTextField.setColor(for: .valid)
                 } else {
-                    print(">>> setting username field red color pub on: \(Thread.current)")
                     usernameTextField.setColor(for: .invalid)
                 }
             }
@@ -148,11 +145,9 @@ final class UIPublishersManager {
         formViewModel.$isSubmitEnabled
             .sink { isEnabled in
                 if isEnabled {
-                    print(">>> setting submit enabled pub on: \(Thread.current)")
                     submitButton.isEnabled = true
                     submitButton.layer.opacity = 1
                 } else {
-                    print(">>> setting submit disabled pub on: \(Thread.current)")
                     submitButton.isEnabled = false
                     submitButton.layer.opacity = 0.5
                 }
