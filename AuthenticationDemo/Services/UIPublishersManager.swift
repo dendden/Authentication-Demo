@@ -26,21 +26,23 @@ final class UIPublishersManager {
         self.signupController = signupController
         self.forgotController = forgotController
         self.type = type
+
+        configurePublishers()
     }
 
-    public func configurePublishers() {
+    private func configurePublishers() {
         switch type {
         case .register:
-            break
+            configureRegisterPublishers()
         case .forgot:
-            break
+            configureForgotPublishers()
         default:
             configureLoginPublishers()
         }
     }
 
+    // MARK: - Abstract Publishing Configuration Options
     private func configureLoginPublishers() {
-
         guard let loginController else { fatalError("Unexpected nil ViewController for UI publisher.") }
 
         switch loginController.selectedAuthSystem {
@@ -48,7 +50,7 @@ final class UIPublishersManager {
             setUsernamePublishers(usernameTextField: loginController.usernameTextField)
             formViewModel?.isEmailValid = true
         case .firebase:
-            setFirebaseUsernamePublishers(usernameTextField: loginController.usernameTextField)
+            setEmailPublishers(emailTextField: loginController.usernameTextField)
             formViewModel?.isUsernameValid = true
         }
 
@@ -56,6 +58,23 @@ final class UIPublishersManager {
         setSubmitEnabledPublisher(submitButton: loginController.signInButton)
     }
 
+    private func configureRegisterPublishers() {
+        guard let signupController else { fatalError("Unexpected nil ViewController for UI publisher.") }
+
+        setUsernamePublishers(usernameTextField: signupController.usernameTextField)
+        setEmailPublishers(emailTextField: signupController.emailTextField)
+        setPasswordPublishers(passwordTextField: signupController.passwordTextField)
+        setSubmitEnabledPublisher(submitButton: signupController.signUpButton)
+    }
+
+    private func configureForgotPublishers() {
+        guard let forgotController else { fatalError("Unexpected nil ViewController for UI publisher.") }
+
+        setEmailPublishers(emailTextField: forgotController.emailTextField)
+        setSubmitEnabledPublisher(submitButton: forgotController.resetPasswordButton)
+    }
+
+    // MARK: - UI Elements Publishing Configuration
     private func setUsernamePublishers(usernameTextField: AuthTextField) {
         NotificationCenter.default
             .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
@@ -71,16 +90,16 @@ final class UIPublishersManager {
             .store(in: &formViewModel.cancellables)
     }
 
-    private func setFirebaseUsernamePublishers(usernameTextField: AuthTextField) {
+    private func setEmailPublishers(emailTextField: AuthTextField) {
         NotificationCenter.default
-            .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
+            .publisher(for: UITextField.textDidChangeNotification, object: emailTextField)
             .compactMap { [weak self] in self?.mapTextFromOutput($0) }
             .assign(to: \.email, on: formViewModel)
             .store(in: &formViewModel.cancellables)
 
         NotificationCenter.default
-            .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
-            .sink { [weak self] _ in self?.setEmailValidPublisher(emailTextField: usernameTextField) }
+            .publisher(for: UITextField.textDidBeginEditingNotification, object: emailTextField)
+            .sink { [weak self] _ in self?.setEmailValidPublisher(emailTextField: emailTextField) }
             .store(in: &formViewModel.cancellables)
     }
 

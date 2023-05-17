@@ -24,7 +24,7 @@ class LoginController: UIViewController {
     private (set) var usernameTextField = AuthTextField(fieldType: .username)
     private (set) var passwordTextField = AuthTextField(fieldType: .password)
     private (set) var signInButton = AuthButton(title: "Sign In")
-    private (set) var registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
+    private let registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
     private let forgotPasswordButton = AuthTextButton(text: "Forgot password?", size: .small)
     private let authSystemPicker = UISegmentedControl()
 
@@ -52,6 +52,7 @@ class LoginController: UIViewController {
             forgotController: nil,
             type: selectedAuthSystem == .nodeJS ? .loginNJS : .loginFirebase
         )
+
         usernameTextField.tag = 1
         usernameTextField.delegate = self
         passwordTextField.tag = 2
@@ -59,8 +60,6 @@ class LoginController: UIViewController {
 
         configureButtons()
         configureAuthSelector()
-
-        uiPublisher.configurePublishers()
 
         createDismissKeyboardTapGesture()
     }
@@ -179,7 +178,6 @@ class LoginController: UIViewController {
                 type: .loginNJS
             )
         }
-        uiPublisher.configurePublishers()
     }
 }
 

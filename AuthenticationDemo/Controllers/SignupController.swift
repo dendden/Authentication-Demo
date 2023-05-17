@@ -9,14 +9,16 @@ import UIKit
 
 class SignupController: UIViewController {
 
+    // MARK: - Variables
     private var adjustableHeaderVerticalConstraint: NSLayoutConstraint!
+    private var uiPublisher: UIPublishersManager!
 
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign Up", subtitle: "Create a new account")
-    private let usernameTextField = AuthTextField(fieldType: .username)
-    private let emailTextField = AuthTextField(fieldType: .email)
-    private let passwordTextField = AuthTextField(fieldType: .password)
-    private let signUpButton = AuthButton(title: "Sign Up")
+    private (set) var usernameTextField = AuthTextField(fieldType: .username)
+    private (set) var emailTextField = AuthTextField(fieldType: .email)
+    private (set) var passwordTextField = AuthTextField(fieldType: .password)
+    private (set) var signUpButton = AuthButton(title: "Sign Up")
     private let hasAccountButton = AuthTextButton(text: "Already have an account? Tap to sign in", size: .medium)
     private let termsText = UITextView()
 
@@ -34,9 +36,16 @@ class SignupController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
-    // MARK: - UI Setup
+    // MARK: - VC configuration
     private func configure() {
         view.backgroundColor = .systemBackground
+
+        uiPublisher = UIPublishersManager(
+            loginController: nil,
+            signupController: self,
+            forgotController: nil,
+            type: .register
+        )
 
         configureTextFields()
 
@@ -102,6 +111,7 @@ class SignupController: UIViewController {
         termsText.delegate = self
     }
 
+    // MARK: - UI Setup
     private func setupUI() {
         view.addSubviews(
             headerView, usernameTextField, emailTextField, passwordTextField,
@@ -181,6 +191,7 @@ class SignupController: UIViewController {
     }
 }
 
+// MARK: - Protocols Conformance
 extension SignupController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

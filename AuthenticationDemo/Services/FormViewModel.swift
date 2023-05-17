@@ -89,7 +89,11 @@ class FormViewModel: ObservableObject {
                 }
                 .store(in: &cancellables)
         case .forgot:
-            return
+            $isEmailValid
+                .sink { [weak self] in
+                    self?.isSubmitEnabled = $0
+                }
+                .store(in: &cancellables)
         }
 
     }

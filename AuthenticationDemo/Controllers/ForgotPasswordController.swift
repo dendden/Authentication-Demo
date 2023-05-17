@@ -9,10 +9,13 @@ import UIKit
 
 class ForgotPasswordController: UIViewController {
 
+    // MARK: - Variables
+    private var uiPublisher: UIPublishersManager!
+
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Reset Password", subtitle: "Enter email to reset your password")
-    private let emailTextField = AuthTextField(fieldType: .email, isLast: true)
-    private let resetPasswordButton = AuthButton(title: "Reset Password")
+    private (set) var emailTextField = AuthTextField(fieldType: .email, isLast: true)
+    private (set) var resetPasswordButton = AuthButton(title: "Reset Password")
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -27,9 +30,16 @@ class ForgotPasswordController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
 
-    // MARK: - UI Setup
+    // MARK: - VC configuration
     private func configure() {
         view.backgroundColor = .systemBackground
+
+        uiPublisher = UIPublishersManager(
+            loginController: nil,
+            signupController: nil,
+            forgotController: self,
+            type: .forgot
+        )
 
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
         navigationItem.rightBarButtonItem = doneButton
@@ -39,6 +49,7 @@ class ForgotPasswordController: UIViewController {
         setupUI()
     }
 
+    // MARK: - UI Setup
     private func setupUI() {
         view.addSubviews(headerView, emailTextField, resetPasswordButton)
 

@@ -42,8 +42,12 @@ class AuthHeaderView: UIView {
             return
         }
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
-        blurView.frame = bounds
-        blurView.transform = CGAffineTransform(translationX: 0, y: -15)
+        blurView.frame = CGRect(
+            x: bounds.origin.x,
+            y: bounds.origin.y - 15,
+            width: bounds.width,
+            height: bounds.height + 30
+        )
         addSubview(blurView)
     }
 
