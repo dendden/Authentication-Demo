@@ -9,7 +9,8 @@ import UIKit
 
 class HomeController: UIViewController {
 
-    let homeImageView = UIImageView()
+    private let homeImageView = UIImageView()
+    private let addPhotoButton = AuthButton(title: "Set Photo")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +37,9 @@ class HomeController: UIViewController {
         homeImageView.translatesAutoresizingMaskIntoConstraints = false
         homeImageView.tintColor = .systemOrange
 
-        view.addSubview(homeImageView)
+        addPhotoButton.addTarget(self, action: #selector(addPhotoFromLibrary), for: .touchUpInside)
+
+        view.addSubviews(homeImageView, addPhotoButton)
 
         NSLayoutConstraint.activate([
             homeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -55,5 +58,29 @@ class HomeController: UIViewController {
         } catch let error {
             showLogoutAlert(with: error)
         }
+    }
+
+    @objc private func addPhotoFromLibrary() {
+        let photoPicker = UIImagePickerController()
+        photoPicker.allowsEditing = true
+        photoPicker.delegate = self
+        present(photoPicker, animated: true)
+    }
+}
+
+extension HomeController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
+        guard
+            let image = info[.editedImage] as? UIImage,
+            let documentsPath = FileManager.default.documentsDirectory
+        else { return }
+
+        image.writeToDocuments(documentsPath, name: "home_photo")
+
+        dismiss(animated: true)
     }
 }

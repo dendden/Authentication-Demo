@@ -15,15 +15,16 @@ class LoginController: UIViewController {
         case nodeJS = "Node.js"
     }
 
-    private var selectedAuthSystem = AuthSystem.nodeJS
-    private var viewModel = FormViewModel(formType: .loginNJS)
+    // MARK: - Variables
+    private (set) var selectedAuthSystem = AuthSystem.nodeJS
+    private var uiPublisher: UIPublishersManager!
 
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign In", subtitle: "Sign in to your account")
-    private let usernameTextField = AuthTextField(fieldType: .username)
-    private let passwordTextField = AuthTextField(fieldType: .password)
-    private let signInButton = AuthButton(title: "Sign In")
-    private let registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
+    private (set) var usernameTextField = AuthTextField(fieldType: .username)
+    private (set) var passwordTextField = AuthTextField(fieldType: .password)
+    private (set) var signInButton = AuthButton(title: "Sign In")
+    private (set) var registerButton = AuthTextButton(text: "New user? Create account", size: .medium)
     private let forgotPasswordButton = AuthTextButton(text: "Forgot password?", size: .small)
     private let authSystemPicker = UISegmentedControl()
 
@@ -41,10 +42,16 @@ class LoginController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
-    // MARK: - UI Setup
+    // MARK: - VC configuration
     private func configure() {
         view.backgroundColor = .systemBackground
 
+        uiPublisher = UIPublishersManager(
+            loginController: self,
+            signupController: nil,
+            forgotController: nil,
+            type: selectedAuthSystem == .nodeJS ? .loginNJS : .loginFirebase
+        )
         usernameTextField.tag = 1
         usernameTextField.delegate = self
         passwordTextField.tag = 2
@@ -52,7 +59,8 @@ class LoginController: UIViewController {
 
         configureButtons()
         configureAuthSelector()
-        configurePublishers()
+
+        uiPublisher.configurePublishers()
 
         createDismissKeyboardTapGesture()
     }
@@ -81,6 +89,7 @@ class LoginController: UIViewController {
         view.addGestureRecognizer(tap)
     }
 
+    // MARK: - UI Setup
     private func setupUI() {
         view.addSubviews(
             headerView, usernameTextField, passwordTextField, signInButton, registerButton,
@@ -154,133 +163,27 @@ class LoginController: UIViewController {
         if authSystemPicker.selectedSegmentIndex == 0 {
             selectedAuthSystem = .firebase
             usernameTextField.setType(.email)
-            viewModel = FormViewModel(formType: .loginFirebase)
+            uiPublisher = UIPublishersManager(
+                loginController: self,
+                signupController: nil,
+                forgotController: nil,
+                type: .loginFirebase
+            )
         } else {
             selectedAuthSystem = .nodeJS
             usernameTextField.setType(.username)
-            viewModel = FormViewModel(formType: .loginNJS)
+            uiPublisher = UIPublishersManager(
+                loginController: self,
+                signupController: nil,
+                forgotController: nil,
+                type: .loginNJS
+            )
         }
-        configurePublishers()
-    }
-
-    // MARK: - Publishers:
-    private func configurePublishers() {
-
-        switch selectedAuthSystem {
-        case .nodeJS:
-            setNodeJSUsernamePublishers()
-            viewModel.isEmailValid = true
-        case .firebase:
-            setFirebaseUsernamePublishers()
-            viewModel.isUsernameValid = true
-        }
-
-        setPasswordPublishers()
-        setSubmitEnabledPublisher()
-    }
-
-    private func setNodeJSUsernamePublishers() {
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
-            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
-            .assign(to: \.username, on: viewModel)
-            .store(in: &viewModel.cancellables)
-
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
-            .sink { [weak self] _ in self?.setUsernameValidPublisher() }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func setFirebaseUsernamePublishers() {
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidChangeNotification, object: usernameTextField)
-            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
-            .assign(to: \.email, on: viewModel)
-            .store(in: &viewModel.cancellables)
-
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidBeginEditingNotification, object: usernameTextField)
-            .sink { [weak self] _ in self?.setEmailValidPublisher() }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func setPasswordPublishers() {
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidChangeNotification, object: passwordTextField)
-            .compactMap { [weak self] in self?.mapTextFromOutput($0) }
-            .assign(to: \.password, on: viewModel)
-            .store(in: &viewModel.cancellables)
-
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidBeginEditingNotification, object: passwordTextField)
-            .sink { [weak self] _ in self?.setPasswordValidPublisher() }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func mapTextFromOutput(_ output: NotificationCenter.Publisher.Output) -> String? {
-        if let textField = output.object as? AuthTextField {
-            return textField.text
-        } else {
-            return nil
-        }
-    }
-
-    private func setUsernameValidPublisher() {
-        viewModel.$isUsernameValid
-            .sink { [weak self] isValid in
-                guard let self else { return }
-                if isValid {
-                    self.usernameTextField.setColor(for: .valid)
-                } else {
-                    self.usernameTextField.setColor(for: .invalid)
-                }
-            }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func setEmailValidPublisher() {
-        viewModel.$isEmailValid
-            .sink { [weak self] isValid in
-                guard let self else { return }
-                if isValid {
-                    self.usernameTextField.setColor(for: .valid)
-                } else {
-                    self.usernameTextField.setColor(for: .invalid)
-                }
-            }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func setPasswordValidPublisher() {
-        viewModel.$isPasswordValid
-            .sink { [weak self] isValid in
-                guard let self else { return }
-                if isValid {
-                    self.passwordTextField.setColor(for: .valid)
-                } else {
-                    self.passwordTextField.setColor(for: .invalid)
-                }
-            }
-            .store(in: &viewModel.cancellables)
-    }
-
-    private func setSubmitEnabledPublisher() {
-        viewModel.$isSubmitEnabled
-            .sink { [weak self] isEnabled in
-                guard let self else { return }
-                if isEnabled {
-                    self.signInButton.isEnabled = true
-                    self.signInButton.layer.opacity = 1
-                } else {
-                    self.signInButton.isEnabled = false
-                    self.signInButton.layer.opacity = 0.5
-                }
-            }
-            .store(in: &viewModel.cancellables)
+        uiPublisher.configurePublishers()
     }
 }
 
+// MARK: - Protocols Conformance
 extension LoginController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

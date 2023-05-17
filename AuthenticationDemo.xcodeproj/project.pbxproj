@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		085CF3C52A12E14B006E14D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */; };
+		085CF3C72A12E625006E14D0 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */; };
+		085CF3EE2A140272006E14D0 /* UIPublishersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */; };
 		08CB53532A0FF8440095DBE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53522A0FF8440095DBE9 /* AppDelegate.swift */; };
 		08CB53552A0FF8440095DBE9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB53542A0FF8440095DBE9 /* SceneDelegate.swift */; };
 		08CB535C2A0FF8480095DBE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08CB535B2A0FF8480095DBE9 /* Assets.xcassets */; };
@@ -36,6 +39,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
+		085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
+		085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPublishersManager.swift; sourceTree = "<group>"; };
 		08CB534F2A0FF8440095DBE9 /* AuthenticationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuthenticationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CB53522A0FF8440095DBE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08CB53542A0FF8440095DBE9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +83,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		085CF3EF2A14B121006E14D0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				08CB538F2A12450C0095DBE9 /* AuthService.swift */,
+				08CB53962A126A710095DBE9 /* ValidationService.swift */,
+				085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */,
+				08CB53982A12744D0095DBE9 /* FormViewModel.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		08CB53462A0FF8440095DBE9 = {
 			isa = PBXGroup;
 			children = (
@@ -96,8 +113,7 @@
 		08CB53512A0FF8440095DBE9 /* AuthenticationDemo */ = {
 			isa = PBXGroup;
 			children = (
-				08CB538F2A12450C0095DBE9 /* AuthService.swift */,
-				08CB53962A126A710095DBE9 /* ValidationService.swift */,
+				085CF3EF2A14B121006E14D0 /* Services */,
 				08CB53912A12477B0095DBE9 /* Models */,
 				08CB53752A10F2BD0095DBE9 /* Extensions */,
 				08CB53702A1005390095DBE9 /* Views */,
@@ -137,6 +153,8 @@
 			children = (
 				08CB53762A10F2D90095DBE9 /* UIView+Ext.swift */,
 				08CB53822A12398E0095DBE9 /* UIViewController+Ext.swift */,
+				085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */,
+				085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -153,7 +171,6 @@
 		08CB53812A1239770095DBE9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				08CB53982A12744D0095DBE9 /* FormViewModel.swift */,
 				08CB536A2A1004080095DBE9 /* LoginController.swift */,
 				08CB536C2A1004BB0095DBE9 /* SignupController.swift */,
 				08CB53682A1003AC0095DBE9 /* ForgotPasswordController.swift */,
@@ -274,6 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				085CF3C72A12E625006E14D0 /* UIImage+Ext.swift in Sources */,
 				08CB53742A10E9830095DBE9 /* CircleView.swift in Sources */,
 				08CB53952A1250910095DBE9 /* LoginRequest.swift in Sources */,
 				08CB53972A126A710095DBE9 /* ValidationService.swift in Sources */,
@@ -289,6 +307,8 @@
 				08CB536D2A1004BB0095DBE9 /* SignupController.swift in Sources */,
 				08CB537C2A112E040095DBE9 /* AuthButton.swift in Sources */,
 				08CB53772A10F2D90095DBE9 /* UIView+Ext.swift in Sources */,
+				085CF3EE2A140272006E14D0 /* UIPublishersManager.swift in Sources */,
+				085CF3C52A12E14B006E14D0 /* FileManager+Ext.swift in Sources */,
 				08CB53552A0FF8440095DBE9 /* SceneDelegate.swift in Sources */,
 				08CB53902A12450C0095DBE9 /* AuthService.swift in Sources */,
 				08CB536B2A1004080095DBE9 /* LoginController.swift in Sources */,

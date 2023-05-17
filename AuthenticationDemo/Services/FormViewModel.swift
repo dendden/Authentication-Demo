@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 enum FormType {
-    case loginNJS, loginFirebase, register
+    case loginNJS, loginFirebase, register, forgot
 }
 
 class FormViewModel: ObservableObject {
@@ -71,7 +71,6 @@ class FormViewModel: ObservableObject {
             $isUsernameValid
                 .combineLatest($isPasswordValid)
                 .sink { [weak self] validTuple in
-                    print(">>> submit status: \(validTuple.0), \(validTuple.1)")
                     self?.isSubmitEnabled = validTuple.0 && validTuple.1
                 }
                 .store(in: &cancellables)
@@ -79,7 +78,6 @@ class FormViewModel: ObservableObject {
             $isEmailValid
                 .combineLatest($isPasswordValid)
                 .sink { [weak self] validTuple in
-                    print(">>> submit status: \(validTuple.0), \(validTuple.1)")
                     self?.isSubmitEnabled = validTuple.0 && validTuple.1
                 }
                 .store(in: &cancellables)
@@ -87,10 +85,11 @@ class FormViewModel: ObservableObject {
             $isUsernameValid
                 .combineLatest($isEmailValid, $isPasswordValid)
                 .sink { [weak self] validTuple in
-                    print(">>> submit status: \(validTuple.0), \(validTuple.1), \(validTuple.2)")
                     self?.isSubmitEnabled = validTuple.0 && validTuple.1 && validTuple.2
                 }
                 .store(in: &cancellables)
+        case .forgot:
+            return
         }
 
     }
