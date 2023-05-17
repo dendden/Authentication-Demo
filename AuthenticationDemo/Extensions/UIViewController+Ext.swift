@@ -9,6 +9,14 @@ import UIKit
 
 extension UIViewController {
 
+    func configureSceneAuthStatus() {
+        if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
+            DispatchQueue.main.async {
+                sceneDelegate.configureWithAuthStatus()
+            }
+        }
+    }
+
     func showAlert(title: String, message: String? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let gotitAction = UIAlertAction(title: "Got it", style: .default)
@@ -17,18 +25,6 @@ extension UIViewController {
         DispatchQueue.main.async {
             self.present(alert, animated: true)
         }
-    }
-
-    func showInvalidEmailAlert() {
-        showAlert(title: "Invalid Email", message: "Please provide a valid email address.")
-    }
-
-    func showInvalidPasswordAlert() {
-        showAlert(title: "Incorrect Password", message: "The password you've entered is not valid. Please try again.")
-    }
-
-    func showInvalidUsernameAlert() {
-        showAlert(title: "User Not Found", message: "Please enter an existing username.")
     }
 
     func showRegistrationAlert() {
@@ -49,6 +45,10 @@ extension UIViewController {
 
     func showLogoutAlert(with error: Error) {
         showAlert(title: "Logout Error", message: error.localizedDescription)
+    }
+
+    func showResetPasswordAlert() {
+        showAlert(title: "Password Reset Error", message: "An unexpected error occurred. Please try again later.")
     }
 
     func showResetPasswordAlert(with error: Error) {

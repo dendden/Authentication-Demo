@@ -138,8 +138,26 @@ class LoginController: UIViewController {
     // MARK: - Selectors
     @objc private func didTapSignIn() {
         view.endEditing(true)
-        if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
-            sceneDelegate.configureWithAuthStatus()
+        signInButton.setProcessing(true)
+
+        let loginRequest = LoginRequest(
+            email: uiPublisher.formViewModel.email,
+            password: uiPublisher.formViewModel.password
+        )
+
+        Task {
+            do {
+                try await AuthService.shared.login(with: loginRequest)
+                DispatchQueue.main.async {
+                    self.signInButton.setProcessing(false)
+                }
+                configureSceneAuthStatus()
+            } catch let error {
+                DispatchQueue.main.async {
+                    self.signInButton.setProcessing(false)
+                }
+                showLoginAlert(with: error)
+            }
         }
     }
 

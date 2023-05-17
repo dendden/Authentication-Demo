@@ -37,6 +37,7 @@ class AuthTextField: UITextField {
         borderStyle = .roundedRect
         autocorrectionType = .no
         autocapitalizationType = .none
+        clearButtonMode = .whileEditing
 
         setKeyboardDoneButton()
         translatesAutoresizingMaskIntoConstraints = false

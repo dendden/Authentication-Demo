@@ -9,7 +9,7 @@ import UIKit
 
 final class UIPublishersManager {
 
-    private var formViewModel: FormViewModel!
+    private (set) var formViewModel: FormViewModel!
     weak var loginController: LoginController?
     weak var signupController: SignupController?
     weak var forgotController: ForgotPasswordController?

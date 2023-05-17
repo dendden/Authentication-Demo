@@ -164,10 +164,30 @@ class SignupController: UIViewController {
 
     // MARK: - Selectors
     @objc private func didTapSignUp() {
+
         view.endEditing(true)
-        let homeVC = HomeController()
-        homeVC.title = "Welcome"
-        navigationController?.pushViewController(homeVC, animated: true)
+        signUpButton.setProcessing(true)
+
+        let registerRequest = RegistrationRequest(
+            username: uiPublisher.formViewModel.username,
+            email: uiPublisher.formViewModel.email,
+            password: uiPublisher.formViewModel.password
+        )
+
+        Task {
+            do {
+                try await AuthService.shared.registerUser(request: registerRequest)
+                DispatchQueue.main.async {
+                    self.signUpButton.setProcessing(false)
+                }
+                configureSceneAuthStatus()
+            } catch let error {
+                DispatchQueue.main.async {
+                    self.signUpButton.setProcessing(false)
+                }
+                showRegistrationAlert(with: error)
+            }
+        }
     }
 
     @objc private func didTapHasAccount() {

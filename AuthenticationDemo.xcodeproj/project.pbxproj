@@ -42,6 +42,7 @@
 		085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
 		085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPublishersManager.swift; sourceTree = "<group>"; };
+		085CF3F02A152811006E14D0 /* AuthenticationDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuthenticationDemo.entitlements; sourceTree = "<group>"; };
 		08CB534F2A0FF8440095DBE9 /* AuthenticationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuthenticationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CB53522A0FF8440095DBE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08CB53542A0FF8440095DBE9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		08CB53512A0FF8440095DBE9 /* AuthenticationDemo */ = {
 			isa = PBXGroup;
 			children = (
+				085CF3F02A152811006E14D0 /* AuthenticationDemo.entitlements */,
 				085CF3EF2A14B121006E14D0 /* Services */,
 				08CB53912A12477B0095DBE9 /* Models */,
 				08CB53752A10F2BD0095DBE9 /* Extensions */,
@@ -449,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AuthenticationDemo/AuthenticationDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Y7QY22UYMJ;
@@ -478,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AuthenticationDemo/AuthenticationDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Y7QY22UYMJ;

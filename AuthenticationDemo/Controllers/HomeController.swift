@@ -31,11 +31,21 @@ class HomeController: UIViewController {
         let signOutButton = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(signOut))
         navigationItem.rightBarButtonItem = signOutButton
 
-        let image = UIImage(systemName: "sun.dust")
+        var image = UIImage(systemName: "sun.dust")
+        if
+            let documentsPath = FileManager.default.documentsDirectory,
+            let storedImage = UIImage(from: documentsPath.appendingPathComponent("home_photo"))
+        {
+            image = storedImage
+        }
         homeImageView.image = image
         homeImageView.contentMode = .scaleAspectFit
         homeImageView.translatesAutoresizingMaskIntoConstraints = false
         homeImageView.tintColor = .systemOrange
+        homeImageView.layer.cornerRadius = 15
+        homeImageView.layer.borderColor = UIColor.systemIndigo.cgColor
+        homeImageView.layer.borderWidth = 4
+        homeImageView.clipsToBounds = true
 
         addPhotoButton.addTarget(self, action: #selector(addPhotoFromLibrary), for: .touchUpInside)
 
@@ -45,26 +55,31 @@ class HomeController: UIViewController {
             homeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             homeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             homeImageView.widthAnchor.constraint(equalToConstant: 250),
-            homeImageView.heightAnchor.constraint(equalToConstant: 250)
+            homeImageView.heightAnchor.constraint(equalToConstant: 250),
+
+            addPhotoButton.topAnchor.constraint(equalTo: homeImageView.bottomAnchor, constant: 40),
+            addPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addPhotoButton.widthAnchor.constraint(equalToConstant: 200),
+            addPhotoButton.heightAnchor.constraint(equalToConstant: 46)
         ])
     }
 
     @objc private func signOut() {
         do {
             try AuthService.shared.logout()
-            if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
-                sceneDelegate.configureWithAuthStatus()
-            }
+            configureSceneAuthStatus()
         } catch let error {
             showLogoutAlert(with: error)
         }
     }
 
     @objc private func addPhotoFromLibrary() {
+        addPhotoButton.setProcessing(true)
         let photoPicker = UIImagePickerController()
         photoPicker.allowsEditing = true
         photoPicker.delegate = self
         present(photoPicker, animated: true)
+        addPhotoButton.setProcessing(false)
     }
 }
 
@@ -78,6 +93,8 @@ extension HomeController: UIImagePickerControllerDelegate, UINavigationControlle
             let image = info[.editedImage] as? UIImage,
             let documentsPath = FileManager.default.documentsDirectory
         else { return }
+
+        homeImageView.image = image
 
         image.writeToDocuments(documentsPath, name: "home_photo")
 
