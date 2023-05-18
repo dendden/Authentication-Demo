@@ -9,6 +9,10 @@ import UIKit
 
 class HomeController: UIViewController {
 
+    private let userInfoStack = UIStackView()
+    private let infoLine1 = AuthInfoLabel()
+    private let infoLine2 = AuthInfoLabel()
+    private let infoLine3 = AuthInfoLabel()
     private let homeImageView = UIImageView()
     private let addPhotoButton = AuthButton(title: "Set Photo")
 
@@ -31,6 +35,41 @@ class HomeController: UIViewController {
         let signOutButton = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(signOut))
         navigationItem.rightBarButtonItem = signOutButton
 
+        configureUserInfoStack()
+        configureImageView()
+
+        addPhotoButton.addTarget(self, action: #selector(addPhotoFromLibrary), for: .touchUpInside)
+        addPhotoButton.translatesAutoresizingMaskIntoConstraints = false
+
+        setupUI()
+    }
+
+    private func configureUserInfoStack() {
+
+        userInfoStack.axis = .vertical
+        userInfoStack.spacing = 10
+        userInfoStack.addArrangedSubview(infoLine1)
+        userInfoStack.addArrangedSubview(infoLine2)
+        userInfoStack.addArrangedSubview(infoLine3)
+        infoLine1.translatesAutoresizingMaskIntoConstraints = false
+        infoLine2.translatesAutoresizingMaskIntoConstraints = false
+        infoLine3.translatesAutoresizingMaskIntoConstraints = false
+        userInfoStack.translatesAutoresizingMaskIntoConstraints = false
+
+        Task {
+            do {
+                let user = try await AuthService.shared.fetchUser()
+
+                infoLine1.text = user.username
+                infoLine2.text = user.email
+                infoLine3.text = user.uid
+            } catch let error {
+                showUserFetchAlert(with: error)
+            }
+        }
+    }
+
+    private func configureImageView() {
         var image = UIImage(systemName: "sun.dust")
         if
             let documentsPath = FileManager.default.documentsDirectory,
@@ -47,11 +86,18 @@ class HomeController: UIViewController {
         homeImageView.layer.borderWidth = 4
         homeImageView.clipsToBounds = true
 
-        addPhotoButton.addTarget(self, action: #selector(addPhotoFromLibrary), for: .touchUpInside)
+        homeImageView.translatesAutoresizingMaskIntoConstraints = false
+    }
 
-        view.addSubviews(homeImageView, addPhotoButton)
+    private func setupUI() {
+        view.addSubviews(userInfoStack, homeImageView, addPhotoButton)
 
         NSLayoutConstraint.activate([
+            userInfoStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            userInfoStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            userInfoStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            userInfoStack.heightAnchor.constraint(equalToConstant: 90),
+
             homeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             homeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             homeImageView.widthAnchor.constraint(equalToConstant: 250),

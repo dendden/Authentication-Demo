@@ -9,12 +9,17 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 
+enum FirebaseDocumentKeys {
+    static let username = "username"
+    static let email = "email"
+}
+
 class AuthService {
 
     static let shared = AuthService()
 
     let firebaseAuth = Auth.auth()
-    let firebaseBD = Firestore.firestore()
+    let firebaseDB = Firestore.firestore()
 
     private init() {}
 
@@ -23,11 +28,11 @@ class AuthService {
     func registerUser(request: RegistrationRequest) async throws {
         let result = try await firebaseAuth.createUser(withEmail: request.email, password: request.password)
 
-        try await firebaseBD.collection("users")
+        try await firebaseDB.collection("users")
             .document(result.user.uid)
             .setData([
-                "username": request.username,
-                "email": request.email
+                FirebaseDocumentKeys.username: request.username,
+                FirebaseDocumentKeys.email: request.email
             ])
     }
 
@@ -37,5 +42,30 @@ class AuthService {
 
     func logout() throws {
         try firebaseAuth.signOut()
+    }
+
+    func forgotPassword(for email: String) async throws {
+        try await firebaseAuth.sendPasswordReset(withEmail: email)
+    }
+
+    func fetchUser() async throws -> User {
+        guard let uid = firebaseAuth.currentUser?.uid else {
+            throw URLError(.badServerResponse)
+        }
+
+        let userSnapshot = try await firebaseDB
+            .collection("users")
+            .document(uid)
+            .getDocument()
+
+        guard
+            let userData = userSnapshot.data(),
+            let username = userData[FirebaseDocumentKeys.username] as? String,
+            let email = userData[FirebaseDocumentKeys.email] as? String
+        else {
+            throw URLError(.cannotCreateFile)
+        }
+
+        return User(username: username, email: email, uid: uid)
     }
 }

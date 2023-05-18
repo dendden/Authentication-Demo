@@ -54,7 +54,7 @@ class AuthTextField: UITextField {
             placeholder = "Email"
         case .password:
             returnKeyType = .go
-            textContentType = .password
+            textContentType = .newPassword
             isSecureTextEntry = true
             placeholder = "Password"
         }

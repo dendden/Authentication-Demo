@@ -80,6 +80,22 @@ class ForgotPasswordController: UIViewController {
     }
 
     @objc private func didTapResetPassword() {
+        view.endEditing(true)
+        resetPasswordButton.setProcessing(true)
 
+        Task {
+            do {
+                try await AuthService.shared.forgotPassword(for: uiPublisher.formViewModel.email)
+                DispatchQueue.main.async {
+                    self.resetPasswordButton.setProcessing(false)
+                }
+                showResetPasswordSuccessAlert()
+            } catch let error {
+                DispatchQueue.main.async {
+                    self.resetPasswordButton.setProcessing(false)
+                }
+                showResetPasswordAlert(with: error)
+            }
+        }
     }
 }
