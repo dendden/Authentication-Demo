@@ -27,7 +27,7 @@ class ValidationService {
 
     static func isValidPassword(_ password: String) -> Bool {
         let cleanPassword = password.trimmingCharacters(in: .whitespacesAndNewlines)
-        let passRegEx = "^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,32}$"
+        let passRegEx = "^(?=.*[A-Z])(?=.*[-])(?=.*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,32}$"
         let passPredicate = NSPredicate(format: "SELF MATCHES %@", passRegEx)
 
         return passPredicate.evaluate(with: cleanPassword)
