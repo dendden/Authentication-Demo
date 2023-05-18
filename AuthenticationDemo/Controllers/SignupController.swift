@@ -17,7 +17,7 @@ class SignupController: UIViewController {
     private let headerView = AuthHeaderView(title: "Sign Up", subtitle: "Create a new account")
     private (set) var usernameTextField = AuthTextField(fieldType: .username)
     private (set) var emailTextField = AuthTextField(fieldType: .email)
-    private (set) var passwordTextField = AuthTextField(fieldType: .password)
+    private (set) var passwordTextField = AuthTextField(fieldType: .password, passwordMode: .new)
     private (set) var signUpButton = AuthButton(title: "Sign Up")
     private let hasAccountButton = AuthTextButton(text: "Already have an account? Tap to sign in", size: .medium)
     private let termsText = UITextView()

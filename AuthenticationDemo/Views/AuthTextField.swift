@@ -17,12 +17,18 @@ class AuthTextField: UITextField {
         case normal, valid, invalid
     }
 
+    enum AuthPasswordMode {
+        case existing, new
+    }
+
     private var fieldType: AuthTextFieldType
     private let isLast: Bool
+    private let passwordMode: AuthPasswordMode
 
-    init(fieldType: AuthTextFieldType, isLast: Bool = false) {
+    init(fieldType: AuthTextFieldType, isLast: Bool = false, passwordMode: AuthPasswordMode = .existing) {
         self.fieldType = fieldType
         self.isLast = isLast
+        self.passwordMode = passwordMode
         super.init(frame: .zero)
 
         configure()
@@ -54,7 +60,7 @@ class AuthTextField: UITextField {
             placeholder = "Email"
         case .password:
             returnKeyType = .go
-            textContentType = .newPassword
+            textContentType = passwordMode == .new ? .newPassword : .password
             isSecureTextEntry = true
             placeholder = "Password"
         }
