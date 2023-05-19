@@ -5,6 +5,7 @@
 //  Created by Денис Трясунов on 13.05.2023.
 //
 
+import LocalAuthentication
 import UIKit
 
 class SignupController: UIViewController {
@@ -12,6 +13,14 @@ class SignupController: UIViewController {
     // MARK: - Variables
     private var adjustableHeaderVerticalConstraint: NSLayoutConstraint!
     private var uiPublisher: UIPublishersManager!
+    private var useBiometrics: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "use_biometrics")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "use_biometrics")
+        }
+    }
 
     // MARK: - UI Components
     private let headerView = AuthHeaderView(title: "Sign Up", subtitle: "Create a new account")
@@ -21,13 +30,15 @@ class SignupController: UIViewController {
     private (set) var signUpButton = AuthButton(title: "Sign Up")
     private let hasAccountButton = AuthTextButton(text: "Already have an account? Tap to sign in", size: .medium)
     private let termsText = UITextView()
+    private let biometricsStack = UIStackView()
+    private let biometricsLabel = UILabel()
+    private let biometricsToggle = UISwitch()
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configure()
-        setupUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,6 +62,31 @@ class SignupController: UIViewController {
 
         signUpButton.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
         hasAccountButton.addTarget(self, action: #selector(didTapHasAccount), for: .touchUpInside)
+
+        let laContext = LAContext()
+        var hasBiometry = true
+        var bioError: NSError?
+
+        laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &bioError)
+        switch laContext.biometryType {
+        case .faceID:
+            biometricsLabel.text = "Use FaceID"
+        case .touchID:
+            biometricsLabel.text = "Use TouchID"
+        default:
+            hasBiometry = false
+        }
+        if hasBiometry {
+            biometricsToggle.isOn = useBiometrics
+            biometricsStack.axis = .horizontal
+            biometricsStack.distribution = .fill
+            biometricsStack.addArrangedSubview(biometricsLabel)
+            biometricsStack.addArrangedSubview(biometricsToggle)
+            biometricsStack.translatesAutoresizingMaskIntoConstraints = false
+            biometricsToggle.addTarget(self, action: #selector(toggleValueChanged), for: .valueChanged)
+        }
+
+        setupUI(showBiometry: hasBiometry)
 
         configureTermsText()
     }
@@ -112,7 +148,7 @@ class SignupController: UIViewController {
     }
 
     // MARK: - UI Setup
-    private func setupUI() {
+    private func setupUI(showBiometry: Bool) {
         view.addSubviews(
             headerView, usernameTextField, emailTextField, passwordTextField,
             signUpButton, hasAccountButton, termsText
@@ -160,6 +196,16 @@ class SignupController: UIViewController {
             hasAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             hasAccountButton.heightAnchor.constraint(equalToConstant: 20)
         ])
+
+        if showBiometry {
+            view.addSubview(biometricsStack)
+            NSLayoutConstraint.activate([
+                biometricsStack.topAnchor.constraint(equalTo: hasAccountButton.bottomAnchor, constant: 30),
+                biometricsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+                biometricsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                biometricsStack.heightAnchor.constraint(equalToConstant: 30)
+            ])
+        }
     }
 
     // MARK: - Selectors
@@ -208,6 +254,10 @@ class SignupController: UIViewController {
             self.headerView.removeCover()
             self.view.layoutIfNeeded()
         }
+    }
+
+    @objc private func toggleValueChanged() {
+        useBiometrics = biometricsToggle.isOn
     }
 }
 

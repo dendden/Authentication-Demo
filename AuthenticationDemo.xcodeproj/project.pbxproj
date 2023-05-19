@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		084843F82A1651220084D882 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084843F72A1651220084D882 /* KeychainManager.swift */; };
 		085CF3C52A12E14B006E14D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */; };
 		085CF3C72A12E625006E14D0 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */; };
 		085CF3EE2A140272006E14D0 /* UIPublishersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		084843F72A1651220084D882 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		085CF3C42A12E14B006E14D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
 		085CF3C62A12E625006E14D0 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPublishersManager.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				08CB538F2A12450C0095DBE9 /* AuthService.swift */,
+				084843F72A1651220084D882 /* KeychainManager.swift */,
 				08CB53962A126A710095DBE9 /* ValidationService.swift */,
 				085CF3ED2A140272006E14D0 /* UIPublishersManager.swift */,
 				08CB53982A12744D0095DBE9 /* FormViewModel.swift */,
@@ -303,6 +306,7 @@
 				08CB537A2A1106B40095DBE9 /* AuthTextField.swift in Sources */,
 				08CB53832A12398E0095DBE9 /* UIViewController+Ext.swift in Sources */,
 				08CB53992A12744D0095DBE9 /* FormViewModel.swift in Sources */,
+				084843F82A1651220084D882 /* KeychainManager.swift in Sources */,
 				08CB537E2A11336E0095DBE9 /* AuthTextButton.swift in Sources */,
 				08CB53692A1003AC0095DBE9 /* ForgotPasswordController.swift in Sources */,
 				08CB536F2A1005070095DBE9 /* HomeController.swift in Sources */,
@@ -461,6 +465,9 @@
 				DEVELOPMENT_TEAM = Y7QY22UYMJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuthenticationDemo/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Sign in using Face ID";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save your home screen picture to photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Select your home screen picture";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -491,6 +498,9 @@
 				DEVELOPMENT_TEAM = Y7QY22UYMJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuthenticationDemo/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Sign in using Face ID";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save your home screen picture to photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Select your home screen picture";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

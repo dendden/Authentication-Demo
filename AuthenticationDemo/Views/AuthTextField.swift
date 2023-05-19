@@ -62,7 +62,9 @@ class AuthTextField: UITextField {
             returnKeyType = .go
             textContentType = passwordMode == .new ? .newPassword : .password
             if passwordMode == .new {
-                passwordRules = UITextInputPasswordRules(descriptor: "minlength: 20; required: lower; required: upper; required: digit; required: [-];")
+                passwordRules = UITextInputPasswordRules(
+                    descriptor: "minlength: 20; required: lower; required: upper; required: digit; required: [-];"
+                )
             }
             isSecureTextEntry = true
             placeholder = "Password"
